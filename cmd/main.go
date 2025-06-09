@@ -1,10 +1,10 @@
 package main
 
 import (
-	"encoding/json"
-	"fmt"
 	"log"
 	"net/http"
+
+	"github.com/comecacahuates/test-go/handlers/rest"
 )
 
 type Resp struct {
@@ -17,17 +17,7 @@ func main() {
 
 	mux := http.NewServeMux()
 
-	mux.HandleFunc("/hello", func(w http.ResponseWriter, r *http.Request) {
-		enc := json.NewEncoder(w)
-		w.Header().Set("Content-Type", "application/json;charset=utf-8")
-		resp := Resp{
-			Language:    "English",
-			Translation: "Hello",
-		}
-		if err := enc.Encode(resp); err != nil {
-			panic(fmt.Sprint("unable to encode response", err))
-		}
-	})
+	mux.HandleFunc("/hello", rest.TranslateHandler)
 
 	log.Printf("listening on %s\n", addr)
 	log.Fatal(http.ListenAndServe(addr, mux))
