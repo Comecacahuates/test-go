@@ -1,0 +1,36 @@
+# https://taskfile.dev
+
+version: "3"
+
+vars:
+  GO_VERSION: 1.24
+
+tasks:
+  install-go:
+    cmds:
+      - wget https://golang.org/dl/go${{GO_VERSION}}.linux-amd64.tar.gz
+      - sudo tar -C /usr/local -xzf go${{GO_VERSION}}.linux-amd64.tar.gz
+      - rm go${{GO_VERSION}}.linux-amd64.tar.gz
+    silent: true
+
+  init-go:
+    cmds:
+      - echo 'export PATH=$$PATH:/usr/local/go/bin' >> '$$HOME/.bashrc'
+      - echo 'export PATH=$$PATH:$$HOME/go/bin' >> '$$HOME/.bashrc'
+
+  test:
+    cmds:
+      - go get -t ./...
+      - go test ./... -coverprofile=coverage.out
+
+  coverage:
+    cmds:
+      - go tool cover -func coverage.out | grep "total:" | awk '{print ((int($3) > 50) != 1)}'
+
+  report:
+    cmds:
+      - go tool cover -html=coverage.out -o coverage.html
+
+  build:
+    cmds:
+      - go build -o api ./cmd/main.go
