@@ -80,6 +80,8 @@ jobs:
   deliver:
     name: Release
     needs: build
+    permissions:
+      contents: write
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
