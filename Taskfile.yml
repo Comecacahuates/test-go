@@ -25,6 +25,10 @@ tasks:
     cmds:
       - test -z $(go fmt ./...)
 
+  vet:
+    cmds:
+      - go vet ./...
+
   test:
     cmds:
       - go get -t ./...
