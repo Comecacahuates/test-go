@@ -102,44 +102,44 @@ jobs:
           name: api
           path: artifacts
 
-  # deliver:
-  #   name: Release
-  #   needs: build
-  #   permissions:
-  #     contents: write
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Checkout code
-  #       uses: actions/checkout@v4
+  deliver:
+    name: Release
+    needs: build
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-  #     - name: Download binary
-  #       uses: actions/download-artifact@v4
-  #       with:
-  #         name: api
+      - name: Download binary
+        uses: actions/download-artifact@v4
+        with:
+          name: api
 
-  #     - name: Verificar existencia de archivo api
-  #       run: |
-  #         if [ ! -f api ]; then
-  #           echo "El archivo 'api' no existe."
-  #           exit 1
-  #         fi
+      - name: Verificar existencia de archivo api
+        run: |
+          if [ ! -f api ]; then
+            echo "El archivo 'api' no existe."
+            exit 1
+          fi
 
-  #     - name: Mostrar detalles del archivo api
-  #       run: |
-  #         ls -lh api
-  #         file api
-  #         stat api
+      - name: Mostrar detalles del archivo api
+        run: |
+          ls -lh api
+          file api
+          stat api
 
-  #     - name: Create release
-  #       id: create_release
-  #       uses: softprops/action-gh-release@v2
-  #       env:
-  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  #       with:
-  #         tag_name: ${{ github.ref_name }}
-  #         name: Release ${{ github.ref_name }}
-  #         body: |
-  #           Still in experimentation phase
-  #         draft: true
-  #         prerelease: true
-  #         files: api
+      - name: Create release
+        id: create_release
+        uses: softprops/action-gh-release@v2.2.2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: Release ${{ github.ref_name }}
+          body: |
+            Still in experimentation phase
+          draft: true
+          prerelease: true
+          files: api
