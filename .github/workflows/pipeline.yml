@@ -24,6 +24,11 @@ jobs:
           version: 3.x
           repo-token: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Install golangci-lint
+        uses: golangci/golangci-lint-action@v8
+        with:
+          version: v2.1
+
       - name: Checkout code into the Go module directory
         uses: actions/checkout@v4
 
