@@ -29,6 +29,10 @@ tasks:
     cmds:
       - go vet ./...
 
+  lint:
+    cmds:
+      - golangci-lint run ./...
+
   test:
     cmds:
       - go get -t ./...
