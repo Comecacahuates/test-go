@@ -11,12 +11,27 @@ tasks:
       - wget https://golang.org/dl/go${{GO_VERSION}}.linux-amd64.tar.gz
       - sudo tar -C /usr/local -xzf go${{GO_VERSION}}.linux-amd64.tar.gz
       - rm go${{GO_VERSION}}.linux-amd64.tar.gz
-    silent: true
 
   init-go:
     cmds:
       - echo 'export PATH=$$PATH:/usr/local/go/bin' >> '$$HOME/.bashrc'
       - echo 'export PATH=$$PATH:$$HOME/go/bin' >> '$$HOME/.bashrc'
+
+  format:
+    cmds:
+      - go fmt ./...
+
+  check-format:
+    cmds:
+      - test -z $(go fmt ./...)
+
+  vet:
+    cmds:
+      - go vet ./...
+
+  lint:
+    cmds:
+      - golangci-lint run ./...
 
   test:
     cmds:

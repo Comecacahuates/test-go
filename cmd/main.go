@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"net/http"
+	"time"
 
 	"github.com/comecacahuates/test-go/handlers/rest"
 )
@@ -20,5 +21,12 @@ func main() {
 	mux.HandleFunc("/hello", rest.TranslateHandler)
 
 	log.Printf("listening on %s\n", addr)
-	log.Fatal(http.ListenAndServe(addr, mux))
+	srv := &http.Server{
+		Addr:         addr,
+		Handler:      mux,
+		ReadTimeout:  5 * time.Second,
+		WriteTimeout: 10 * time.Second,
+		IdleTimeout:  120 * time.Second,
+	}
+	log.Fatal(srv.ListenAndServe())
 }

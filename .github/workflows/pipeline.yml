@@ -1,13 +1,49 @@
 name: CI Checks
 
 on:
+  pull_request:
+    branches:
+      - main
   push:
     branches:
       - main
 
 jobs:
+  check-quality:
+    name: Check quality
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: ^1.24
+
+      - name: Install Task
+        uses: arduino/setup-task@v2
+        with:
+          version: 3.x
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Checkout code into the Go module directory
+        uses: actions/checkout@v4
+
+      - name: Install golangci-lint
+        uses: golangci/golangci-lint-action@v8
+        with:
+          version: v2.1
+
+      - name: Check formatting
+        run: task check-format
+
+      - name: Vet
+        run: task vet
+
+      - name: Lint
+        run: task lint
+
   test:
     name: Test Application
+    needs: [check-quality]
     runs-on: ubuntu-latest
     steps:
       - name: Setup Go
@@ -92,9 +128,22 @@ jobs:
         with:
           name: api
 
+      - name: Verificar existencia de archivo api
+        run: |
+          if [ ! -f api ]; then
+            echo "El archivo 'api' no existe."
+            exit 1
+          fi
+
+      - name: Mostrar detalles del archivo api
+        run: |
+          ls -lh api
+          file api
+          stat api
+
       - name: Create release
         id: create_release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v2.2.2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
