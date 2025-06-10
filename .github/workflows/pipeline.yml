@@ -9,7 +9,7 @@ on:
       - main
 
 jobs:
-  format-check:
+  check-format:
     name: Check formatting
     runs-on: ubuntu-latest
     steps:
