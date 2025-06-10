@@ -33,9 +33,12 @@ jobs:
       - name: Vet
         run: task vet
 
+      - name: Lint
+        run: task lint
+
   test:
     name: Test Application
-    # needs: [check-format]
+    needs: [check-quality]
     runs-on: ubuntu-latest
     steps:
       - name: Setup Go
