@@ -117,6 +117,19 @@ jobs:
         with:
           name: api
 
+      - name: Verificar existencia de archivo api
+        run: |
+          if [ ! -f api ]; then
+            echo "El archivo 'api' no existe."
+            exit 1
+          fi
+
+      - name: Mostrar detalles del archivo api
+        run: |
+          ls -lh api
+          file api
+          stat api
+
       - name: Create release
         id: create_release
         uses: softprops/action-gh-release@v2
