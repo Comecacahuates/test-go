@@ -9,26 +9,29 @@ on:
       - main
 
 jobs:
-  # check-format:
-  #   name: Check formatting
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Setup Go
-  #       uses: actions/setup-go@v5
-  #       with:
-  #         go-version: ^1.24
+  check-quality:
+    name: Check quality
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: ^1.24
 
-  #     - name: Install Task
-  #       uses: arduino/setup-task@v2
-  #       with:
-  #         version: 3.x
-  #         repo-token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Install Task
+        uses: arduino/setup-task@v2
+        with:
+          version: 3.x
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
 
-  #     - name: Checkout code into the Go module directory
-  #       uses: actions/checkout@v4
+      - name: Checkout code into the Go module directory
+        uses: actions/checkout@v4
 
-  #     - name: Check formatting
-  #       run: task check-format
+      - name: Check formatting
+        run: task check-format
+
+      - name: Vet
+        run: task vet
 
   test:
     name: Test Application
